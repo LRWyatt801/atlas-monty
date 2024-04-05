@@ -25,7 +25,7 @@ int main(int argc, char **argv)
 	montyfile = filereader(argv[1]); /*reads file to montyfile*/
 	while(running)
 	{
-		filegetline(montyfile);/*get line of file*/
-		opfinder();/*finds cmd to execute*/
+		filegetline(montyfile);/*get line of file*/ /*TODO add variable to put in opfinder*/
+		opfinder(/*TODO tok from filegetline*/);/*finds cmd to execute*/
 	}
 }

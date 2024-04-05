@@ -40,4 +40,6 @@ typedef struct instruction_s
 
 /*prototypes*/
 
+/*TODO include all prototypes*/
+
 #endif

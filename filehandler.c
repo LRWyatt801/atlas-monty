@@ -15,8 +15,13 @@ char *filereader(char *name)
 }
 
 /**
- * filegitline - gets a line from file
+ * filegetline - gets a line from file
  * @readfile: file that has been read
  *
  * Return: returns line
 */
+
+char *filegetline(char *s)
+{
+
+}
