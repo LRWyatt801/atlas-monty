@@ -1,6 +1,5 @@
 #include "monty.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include <string.h>
 
 /**
  * filegetline - gets a line from file and tokenizes it
