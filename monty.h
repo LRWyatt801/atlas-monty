@@ -7,11 +7,24 @@
 /*macros*/
 
 #define BUFF_SIZE 1024
-#define WHITESPACE " \n\t\r"
+#define WHITESPACE " $\n\t\r" /*$ indicates end of line in monty*/
 
-/*GLOBAL VARIABLES (make struct if needed)*/
+/*GLOBAL VARIABLE*/
 
-int line_count = 1;
+/**
+ * struct GLOBVARS - structure of global variables
+ * @line_number: line number being executed in Montybytes file
+ * @optok: token for operation from Montybytes file
+ * @strn: int from Montybytes file
+*/
+
+typedef struct GLOBVARS_s
+{
+		unsigned int line_number;
+		char *optok;
+		char *intstr;
+} globvars_t;
+extern globvars_t *globvars;
 
 /*structs*/
 
@@ -47,7 +60,8 @@ typedef struct instruction_s
 
 /*file prototypes*/
 
-char *filegetline(char *filename);
+int filegetline(FILE *fp);
+int globvarset(char **tokstr);
 
 /*free prototypes*/
 
@@ -55,8 +69,9 @@ int freematrix(char **arr_name);
 
 /*ops prototypes*/
 
-stack_t *stk_push(stack_t **top);
-size_t stk_pall(stack_t *top);
+void (*opfinder(char **op_arr))(stack_t **, unsigned int);
+void stk_push(stack_t **top, unsigned int line_number);
+void stk_pall(stack_t **top, unsigned int line_number);
 
 /*TODO include all prototypes*/
 

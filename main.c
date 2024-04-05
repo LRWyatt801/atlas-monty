@@ -15,6 +15,18 @@ int main(int argc, char **argv)
 	FILE *montyfile; /*file for montybyte commands*/
 	char **optok = NULL;
 	void (*f)(stack_t **, unsigned int);
+	globvars_t *globvars;
+
+	/*initialize globvars*/
+	globvars = malloc(sizeof(globvars_t));
+	if (globvars == NULL)
+	{
+		fprintf(stderr, "Error: malloc failed\n");
+		exit(EXIT_FAILURE);
+	}
+	globvars->optok = NULL;
+	globvars->intstr = NULL;
+	globvars->line_number = 0;
 	
 	if (argc != 2) /*check for 2 args only*/
 	{
@@ -29,9 +41,10 @@ int main(int argc, char **argv)
 	}
 	while(running)
 	{
-		optok = filegetline(montyfile);/*get line of file and tokens*/
+		globvars->line_number++;
+		filegetline(montyfile);/*get line of file and sets tokens as global vars*/
 		f = opfinder(optok);/*finds cmd to execute*/
-
-		line_count++; /*count at end of loop*/
+		f(&montystk, globvars->line_number);
 	}
+	exit(EXIT_SUCCESS);
 }

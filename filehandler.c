@@ -5,10 +5,10 @@
  * filegetline - gets a line from file and tokenizes it
  * @filename: file that has been read
  *
- * Return: returns line
+ * Return: EXIT_SUCCESS or EXIT_FAILURE
 */
 
-char *filegetline(char *filename)
+int filegetline(FILE *fp)
 {
 	char **newarr = NULL;
 	char *tok, *buff = NULL;
@@ -23,7 +23,7 @@ char *filegetline(char *filename)
 		free(buff);
 		exit(EXIT_FAILURE);
 	}
-	if (getline(&buff, &size, filename) < 0) /*get file line input*/
+	if (getline(&buff, &size, fp) < 0) /*get file line input*/
 	{
 		free(newarr);
 		free(buff);
@@ -48,7 +48,32 @@ char *filegetline(char *filename)
 		else
 			newarr[i] = NULL;
 	}
+	globvarset(newarr);
 	free(buff);
 	free(tok);
-	return (newarr);
+	freematrix(newarr);
+	return (EXIT_SUCCESS);
+}
+
+/**
+ * globvarset - sets global variables strn and optok
+ * @tokstr: tokenized matrix
+ *
+ * Return: EXIT_SUCCESS or EXIT_FAILURE
+*/
+
+int globvarset(char **tokstr)
+{
+	globvars = malloc(sizeof(globvars_t));
+	globvars->optok = strdup(tokstr[0]);
+	globvars->intstr = strdup(tokstr[1]);
+	if (globvars->optok == NULL || globvars->intstr == NULL)
+	{
+		free(globvars->optok);
+		free(globvars->intstr);
+		free(globvars);
+		fprintf(stderr, "Error: malloc failed");
+		exit(EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
 }

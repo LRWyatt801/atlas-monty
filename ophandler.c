@@ -28,6 +28,6 @@ void (*opfinder(char **op_arr))(stack_t **, unsigned int)
 			return (ops[i].f);
 		i++;
 	}
-	fprintf(stderr, "L%d: unknown instruction %s\n", line_count, op_arr[0]);
+	fprintf(stderr, "L%d: unknown instruction %s\n", globvars->line_number, op_arr[0]);
 	exit(EXIT_FAILURE);
 }
