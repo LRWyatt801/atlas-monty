@@ -1,12 +1,17 @@
 #ifndef _MONTY_H
 #define _MONTY_H
 
+#include <stdio.h>
+#include <stdlib.h>
+
 /*macros*/
 
-#define EXIT_SUCCESS 0
-#define EXIT_FAILURE 1
 #define BUFF_SIZE 1024
 #define WHITESPACE " \n\t\r"
+
+/*GLOBAL VARIABLES (make struct if needed)*/
+
+int line_count = 1;
 
 /*structs*/
 
@@ -40,7 +45,18 @@ typedef struct instruction_s
         void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-/*prototypes*/
+/*file prototypes*/
+
+char *filegetline(char *filename);
+
+/*free prototypes*/
+
+int freematrix(char **arr_name);
+
+/*ops prototypes*/
+
+stack_t *stk_push(stack_t **top);
+size_t stk_pall(stack_t *top);
 
 /*TODO include all prototypes*/
 
