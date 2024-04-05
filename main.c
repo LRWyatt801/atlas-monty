@@ -1,5 +1,7 @@
 #include "monty.h"
 
+globvars_t *globvars;
+
 /**
  * main - entry point for program "monty"
  * @argc: number of argv
@@ -15,7 +17,6 @@ int main(int argc, char **argv)
 	FILE *montyfile; /*file for montybyte commands*/
 	char **optok = NULL;
 	void (*f)(stack_t **, unsigned int);
-	globvars_t *globvars;
 
 	/*initialize globvars*/
 	globvars = malloc(sizeof(globvars_t));
