@@ -9,23 +9,6 @@
 #define BUFF_SIZE 1024
 #define WHITESPACE " $\n\t\r" /*$ indicates end of line in monty*/
 
-/*GLOBAL VARIABLE*/
-
-/**
- * struct GLOBVARS - structure of global variables
- * @line_number: line number being executed in Montybytes file
- * @optok: token for operation from Montybytes file
- * @strn: int from Montybytes file
-*/
-
-typedef struct GLOBVARS_s
-{
-		unsigned int line_number;
-		char *optok;
-		char *intstr;
-} globvars_t;
-extern globvars_t *globvars;
-
 /*structs*/
 
 /**
@@ -58,19 +41,51 @@ typedef struct instruction_s
         void (*f)(stack_t **stack, unsigned int line_number);
 } instruction_t;
 
-/*file prototypes*/
+/*GLOBAL VARIABLE*/
 
-int filegetline(FILE *fp);
-int globvarset(char **tokstr);
+/**
+ * struct GLOBVARS - structure of global variables
+ * @line_number: line number being executed in Montybytes file
+ * @optok: token for operation from Montybytes file
+ * @strn: int from Montybytes file
+*/
 
-/*free prototypes*/
+typedef struct GLOBVARS_s
+{
+		unsigned int line_number;
+		char *optok;
+		int n;
+		stack_t *top;
+		char *filename;
+} globvars_t;
+extern globvars_t globvars;
 
-int freematrix(char **arr_name);
+/*errors.c prototypes*/
 
-/*ops prototypes*/
+void errorhandler(const int errnum);
 
-void (*opfinder(char **op_arr))(stack_t **, unsigned int);
+/*filehandler.c prototypes*/
+
+void filehandler(char *filename);
+void readfile(FILE *filep);
+void parseline(char *buffer);
+
+/*frees.c prototypes*/
+
+void freestk(stack_t *top);
+
+/*ophandler.c prototypes*/
+
+void oprunner();
+void (*getop())(stack_t **, unsigned int);
+
+
+/*stackfunctions. prototypes*/
+
 void stk_push(stack_t **top, unsigned int line_number);
+
+/*printfunctions.c prototypes*/
+
 void stk_pall(stack_t **top, unsigned int line_number);
 
 /*TODO include all prototypes*/

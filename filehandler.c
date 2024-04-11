@@ -1,79 +1,77 @@
 #include "monty.h"
 #include <string.h>
+#include <ctype.h>
 
 /**
- * filegetline - gets a line from file and tokenizes it
- * @filename: file that has been read
- *
- * Return: EXIT_SUCCESS or EXIT_FAILURE
+ * filehandler - handles the monty
+ * @filename: name of the file
+ * Return: n/a
 */
 
-int filegetline(FILE *fp)
+void filehandler(char *filename)
 {
-	char **newarr = NULL;
-	char *tok, *buff = NULL;
-	size_t size = BUFF_SIZE;
-	int i;
+	FILE *fp = fopen(filename, "r");
 
-	newarr = malloc(sizeof(char *));
-	buff = malloc(size);
-	if (newarr == NULL || buff == NULL)
-	{
-		freematrix(newarr);
-		free(buff);
-		exit(EXIT_FAILURE);
-	}
-	if (getline(&buff, &size, fp) < 0) /*get file line input*/
-	{
-		free(newarr);
-		free(buff);
-		exit(EXIT_FAILURE);
-	}
-	/*get tokens*/
-	tok = strtok(buff, WHITESPACE);
-	newarr[0] = strdup(tok);
-	for (i = 1; tok != NULL; i++)
-	{
-		tok = strtok(NULL, WHITESPACE);
-		if (tok != NULL)
-		{
-			newarr[i] = strdup(tok);
-			if (newarr[0] == NULL || newarr[i] == NULL)
-			{
-				freematrix(newarr);
-				free(buff);
-				exit(EXIT_FAILURE);
-			}
-		}
-		else
-			newarr[i] = NULL;
-	}
-	globvarset(newarr);
-	free(buff);
-	free(tok);
-	freematrix(newarr);
-	return (EXIT_SUCCESS);
+	globvars.filename = filename;
+	if (filename == NULL || fp == NULL)
+		errorhandler(2);
+
+	readfile(fp);
+	fclose(fp);
 }
 
 /**
- * globvarset - sets global variables strn and optok
- * @tokstr: tokenized matrix
- *
- * Return: EXIT_SUCCESS or EXIT_FAILURE
+ * readfile - reads the file
+ * @filep: pointer to file
+ * Return: n/a
 */
 
-int globvarset(char **tokstr)
+void readfile(FILE *filep)
 {
-	globvars = malloc(sizeof(globvars_t));
-	globvars->optok = strdup(tokstr[0]);
-	globvars->intstr = strdup(tokstr[1]);
-	if (globvars->optok == NULL || globvars->intstr == NULL)
+	char *buff = NULL;
+	size_t size = BUFF_SIZE;
+
+	for (globvars.line_number = 1; getline(&buff, &size, filep) != -1; globvars.line_number++)
 	{
-		free(globvars->optok);
-		free(globvars->intstr);
-		free(globvars);
-		fprintf(stderr, "Error: malloc failed");
-		exit(EXIT_FAILURE);
+		parseline(buff);
 	}
-	return (EXIT_SUCCESS);
+	free(buff);
+}
+
+/**
+ * parseline - breaks the line into tokens
+ * @buffer: line from buffer
+ * Return: n/a
+*/
+
+void parseline(char *buffer)
+{
+	char *val, *optok;
+	int flag, i;
+
+	if (buffer == NULL)
+		errorhandler(4);
+
+	optok= strtok(buffer, WHITESPACE);
+	globvars.optok = strdup(optok);
+	if (globvars.optok == NULL)
+		errorhandler(4);
+	val = strtok(NULL, WHITESPACE);
+
+	if (strcmp(globvars.optok, "push") == 0)
+	{
+		if (val != NULL && val[0] == '-')
+		{
+			val = val + 1;
+			flag = -1;
+		}
+		if (val == NULL)
+			errorhandler(5);
+		for (i = 0; val[i] != '\0'; i++)
+		{
+			if (isdigit(val[i]) == 0)
+				errorhandler(5);
+		}
+		globvars.n = (atoi(val) * flag);
+	}
 }

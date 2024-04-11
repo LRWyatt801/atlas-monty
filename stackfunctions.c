@@ -10,19 +10,15 @@
 void stk_push(stack_t **top, unsigned int line_number)
 {
 	stack_t *newTop = NULL;
-	int n;
 	(void)line_number;
 
-	n = atoi(globvars->intstr);
+	printf("8\n");
 
 	newTop = malloc(sizeof(stack_t));
 	if (newTop == NULL)
-		{
-			fprintf(stderr, "Error: malloc failed\n");
-			exit(EXIT_FAILURE);
-		}
+		errorhandler(4);
 
-	newTop->n = n;
+	newTop->n = globvars.n;
 	newTop->prev = NULL;
 	newTop->next = *top;
 	if (*top != NULL)

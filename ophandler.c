@@ -2,32 +2,41 @@
 #include <string.h>
 
 /**
+ * oprunner - runs the operation
+ * Return: n/a
+*/
+
+void oprunner ()
+{
+	void (*func)(stack_t **, unsigned int);
+
+	func = getop();
+	printf("1\n");
+	func(&globvars.top, globvars.line_number);
+}
+
+/**
  * opfinder - finds the operation/function to run
  * @op: function to find
  * 
  * Return: function pointer
 */
 
-void (*opfinder(char **op_arr))(stack_t **, unsigned int)
+void (*getop())(stack_t **, unsigned int)
 {
 	instruction_t ops[] = {
 		{"push", stk_push},
 		{"pall", stk_pall},
-		/*{"pint", stk_pint},
-		{"pop", stk_pop},
-		{"swap", stk_swap},
-		{"add", stk_add},
-		{"nop", stk_nop},*/
 		{NULL, NULL}
 	};
-	int i;
+	int i = 0;
 
 	while (ops[i].opcode != NULL)
 	{
-		if (strcmp(ops[i].opcode, op_arr[0]) == 0)
+		if (strcmp(ops[i].opcode, globvars.optok) == 0)
 			return (ops[i].f);
 		i++;
 	}
-	fprintf(stderr, "L%d: unknown instruction %s\n", globvars->line_number, op_arr[0]);
-	exit(EXIT_FAILURE);
+	errorhandler(3);
+	return (NULL);
 }

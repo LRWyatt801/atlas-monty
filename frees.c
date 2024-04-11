@@ -1,20 +1,19 @@
 #include "monty.h"
 
 /**
- * freematrix - frees a matrix
- * @array: array to be freed
- *
- * Return: 0 on success
+ * freestk - frees the stack
+ * @top: top of stack
+ * Return: n/a
 */
 
-int freematrix(char **arr_name)
+void freestk(stack_t *top)
 {
-	int i;
+	stack_t *tmp;
 
-	for (i = 0; arr_name[i] != NULL; i++)
+	while (top != NULL)
 	{
-		free(arr_name[i]);
+		tmp = top;
+		top = top->next;
+		free(tmp);
 	}
-	free(arr_name);
-	return (0);
 }
